@@ -25,7 +25,7 @@ def evaluate_accuracy(data_iter, net, device=None):
             n += y.shape[0]
     if acc_sum/n > best:
         best = acc_sum / n
-        torch.save(net, 'ExistModel.pt')
+        torch.save(net, 'TypeModel.pt')
     return acc_sum / n
 
 def train(train_iter, test_iter, net, loss, optimizer, device, num_epochs):
@@ -78,25 +78,8 @@ optimizer = optim.SGD([{'params': feature_params}, {'params': pretrained_net.fc.
 loss = torch.nn.CrossEntropyLoss()
 
 def train_fine_tuning(net, optimizer, batch_size=128, num_epochs=50):
-    test_imgs = ImageFolder(r'../input/aitus-data/NumData/test', transform=test_augs)
+    test_imgs = ImageFolder(r'../input/aitus-data/TypeData/test', transform=test_augs)
     test_iter = DataLoader(test_imgs, 1, shuffle=False)
-    train_iter = DataLoader(ImageFolder(r'../input/aitus-data/NumData/train', transform=train_augs), batch_size, shuffle=True)
+    train_iter = DataLoader(ImageFolder(r'../input/aitus-data/TypeData/train', transform=train_augs), batch_size, shuffle=True)
     train(train_iter, test_iter, net, loss, optimizer, device, num_epochs)   
 train_fine_tuning(pretrained_net, optimizer)
-
-
-def predict(data_iter, net, device=None):
-    result = []
-    if device is None and isinstance(net, torch.nn.Module):
-        # 如果没指定device就使用net的device
-        device = list(net.parameters())[0].device 
-    net.eval()
-    with torch.no_grad():
-        for X, y in data_iter:
-            result.append(net(X.to(device)).argmax(dim=1))
-    return result
-print(best)
-#test_imgs = ImageFolder(r'../input/musicpicturefirst/2/test', transform=test_augs)
-#test_iter = DataLoader(test_imgs, 1, shuffle=False)
-#result = predict(test_iter, pretrained_net)
-#pk.dump(result,open("result.pkl","wb"))
