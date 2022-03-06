@@ -1,6 +1,8 @@
 # AITUS Heuristic
  an automatic note maker for CYTUS.
 
+最近一次更新：增加了根据音乐自适应确定生成参数的功能，能让生成的谱面中各种类型note的比例均衡。
+
 **根据指定乐曲自动生成CYTUS游戏谱面。这里是Heuristic版本，1.0版本参见分支。**
 
 效果展示：
